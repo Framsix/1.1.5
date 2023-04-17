@@ -3,30 +3,31 @@ import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
 import java.util.List;
 
-public class UserServiceImpl extends UserDaoJDBCImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
+    UserDaoJDBCImpl udJBCi = new UserDaoJDBCImpl();
 
     public void createUsersTable() {
-        super.createUsersTable();
+        udJBCi.createUsersTable();
     }
 
     public void dropUsersTable() {
-        super.dropUsersTable();
+        udJBCi.dropUsersTable();
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        super.saveUser(name, lastName, age);
+        udJBCi.saveUser(name, lastName, age);
     }
 
     public void removeUserById(long id) {
-        super.removeUserById(id);
+        udJBCi.removeUserById(id);
     }
 
     public List<User> getAllUsers() {
-        return super.getAllUsers();
+        return udJBCi.getAllUsers();
     }
 
     public void cleanUsersTable() {
-        super.cleanUsersTable();
+        udJBCi.cleanUsersTable();
     }
 }
