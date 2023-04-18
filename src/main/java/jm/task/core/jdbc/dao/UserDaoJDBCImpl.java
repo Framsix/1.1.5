@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    Util util = new Util();
     private List <User> users = null;
     private static final String sqlCommandCreateUserTable =
             "CREATE TABLE IF NOT EXISTS users (Id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100), lastName VARCHAR(100), age INT(3))";
@@ -25,7 +24,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        Connection connection = util.getConnection();
+        Connection connection = Util.getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sqlCommandCreateUserTable);
             System.out.println("Таблица создана!");
@@ -34,12 +33,12 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("Таблица уже существует");
         } catch (SQLException e) {
             System.out.println("Таблица не создана!");
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
     public void dropUsersTable() {
-        Connection connection = util.getConnection();
+        Connection connection = Util.getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sqlCommandDeleteUserTable);
             System.out.println("Таблица удалена!");
@@ -48,12 +47,12 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("Таблицы не существует!");
         } catch (SQLException e) {
             System.out.println("Таблица не удалена!");
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        Connection connection = util.getConnection();
+        Connection connection = Util.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(sqlCommandSaveUser)) {
             ps.setString(1, name);
             ps.setString(2, lastName);
@@ -63,12 +62,12 @@ public class UserDaoJDBCImpl implements UserDao {
             connection.close();
         } catch (SQLException e) {
             System.out.println("Пользователь не добавлен!");
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
     public void removeUserById(long id) {
-        Connection connection = util.getConnection();
+        Connection connection = Util.getConnection();
         try (PreparedStatement ps = connection.prepareStatement(sqlCommandDeleteUser)) {
             ps.setLong(1, id);
             ps.executeUpdate();
@@ -76,12 +75,12 @@ public class UserDaoJDBCImpl implements UserDao {
             connection.close();
         } catch (SQLException e) {
             System.out.println("Ошибка удаления!");
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
     public List<User> getAllUsers() {
-        Connection connection = util.getConnection();
+        Connection connection = Util.getConnection();
         try  (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery("SELECT * FROM users");
             users = new ArrayList<>();
@@ -92,20 +91,20 @@ public class UserDaoJDBCImpl implements UserDao {
             }
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return users;
     }
 
     public void cleanUsersTable() {
-        Connection connection = util.getConnection();
+        Connection connection = Util.getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sqlCommandClearTable);
             System.out.println("Таблица очищена!");
             connection.close();
         } catch (SQLException e) {
             System.out.println("Таблица не очищена!");
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }
